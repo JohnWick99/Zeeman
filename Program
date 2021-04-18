@@ -1,0 +1,42 @@
+import matplotlib.pyplot as plt
+from scipy import constants 
+from scipy.signal import find_peaks
+import numpy as np
+import glob
+import os
+import statistics 
+from scipy.optimize import curve_fit
+
+from matplotlib import image
+
+
+
+
+adatok = [
+[ 172, 212, 285, 312, 365,386 , 430, 448, 486, 503, 538, 552],
+[ 167, 215, 283, 313, 364,388 , 428, 450, 486, 504, 536, 553],
+[ 164, 218, 280, 315, 362,389 , 428, 451, 484, 505, 534, 554],
+[ 161, 222, 279, 317, 360,390 , 426, 452, 482, 506, 534, 556],
+[ 156, 224, 276, 320, 358,392 , 424, 454, 482, 508, 532, 556]
+]
+
+adatok = np.array(adatok) * np.sqrt(2)  
+
+deltalambda = []
+
+for i in range(len(adatok)):
+    temp = []
+    for j in range(6):
+        temp.append((adatok[i][2*j+1]**2 - adatok[i][2*j]**2) * (435.84/(1.904*np.sqrt(2)) * 10e-18))
+    deltalambda.append(temp)
+
+deltalambda = np.array(deltalambda)
+
+
+B = [0.4005
+, 0.46725
+,0.534
+,0.60075
+,0.6675 ]
+
+deltaE =  (constants.c * constants.h /435.84e-9) - (constants.c * constants.h/(deltalambda  + 435.84e-9) )
